@@ -7,7 +7,7 @@ var map = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0
     [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //1
     [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //3
+    [0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //3
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //4
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //5
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //6
@@ -34,7 +34,10 @@ function mapInit() {
         for (let block in map[+line]) {
             switch (map[+line][+block]) {
                 case 1:
-                    BrickBuild(line * sizeCell, block * sizeCell);
+                    BrickBuild(block * sizeCell, line * sizeCell);
+                    break;
+                case 2:
+                    BlockBuild(block * sizeCell, line * sizeCell);
                     break;
             }
         }
