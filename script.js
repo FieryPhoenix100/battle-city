@@ -18,8 +18,8 @@ var map = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //10
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //11
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //12
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//13
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //14
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //13
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  //14
 ];
 
 (function init() {
@@ -69,9 +69,12 @@ function BlockBuild(x, y) {
 function Tank() {
     this.x = 0;
     this.y = 0;
+    this.direction = 1;
 }
 
 Tank.prototype.move = function(direction) {
+    this.direction = direction;
+    this.clear();
     switch(direction) {
         case 0: // ^
             this.y -= speed;
@@ -86,4 +89,56 @@ Tank.prototype.move = function(direction) {
             this.x -= speed;
             break;
     }
+    this.draw();
 }
+
+Tank.prototype.clear = function() {
+    ctx.fillStyle = colorBackground;
+    ctx.fillRect(this.x, this.y, sizeCell, sizeCell);
+}
+
+Tank.prototype.draw = function() {
+    ctx.fillStyle = this.color;
+    switch(this.direction) {
+        case 0: // ^
+            ctx.fillRect(this.x + (sizeCell / 2 - sizeCell / 16), this.y, sizeCell / 8, sizeCell / 2);
+            ctx.fillRect(this.x, this.y +  sizeCell / 2, sizeCell, sizeCell / 2);
+            break;
+        case 1: // >
+            ctx.fillRect(this.x + (sizeCell / 2 - sizeCell / 16), this.y + (sizeCell / 2 - sizeCell / 16), sizeCell / 2, sizeCell / 8);
+            ctx.fillRect(this.x, this.y, sizeCell / 2, sizeCell);
+            break;
+        case 2: //
+            ctx.fillRect(this.x + (sizeCell / 2 - sizeCell / 16), this.y + sizeCell / 2, sizeCell / 8, sizeCell / 2);
+            ctx.fillRect(this.x, this.y, sizeCell, sizeCell / 2);
+            break;
+        case 3: // <
+            ctx.fillRect(this.x, this.y + (sizeCell / 2 - sizeCell / 16), sizeCell / 2, sizeCell / 8);
+            ctx.fillRect(this.x + sizeCell / 2, this.y, sizeCell / 2, sizeCell);
+            break;
+    }
+}
+
+Tank.prototype.shoot = function() {
+
+}
+
+var userTank = new Tank();
+userTank.color = "#006400";
+
+document.addEventListener('keydown', function(event) {
+    switch(event.code) {
+        case "KeyW":
+            userTank.move(0);
+            break;
+        case "KeyD":
+            userTank.move(1);
+            break;
+        case "KeyS":
+            userTank.move(2);
+            break;
+        case "KeyA":
+            userTank.move(3);
+            break;
+    }
+});
