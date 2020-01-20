@@ -2,6 +2,7 @@ var sizeCell = 32;
 var canvas = document.getElementById("screen");
 var ctx = canvas.getContext("2d");
 var colorBackground = "orange";
+var speed = sizeCell / 32;
 
 var map = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0
@@ -63,4 +64,26 @@ function BlockBuild(x, y) {
     var color = "#808080";
     ctx.fillStyle = color;
     ctx.fillRect(x, y, sizeCell, sizeCell);
+}
+
+function Tank() {
+    this.x = 0;
+    this.y = 0;
+}
+
+Tank.prototype.move = function(direction) {
+    switch(direction) {
+        case 0: // ^
+            this.y -= speed;
+            break;
+        case 1: // >
+            this.x += speed;
+            break;
+        case 2: // 
+            this.y += speed;
+            break;
+        case 3: // <
+            this.x -= speed;
+            break;
+    }
 }
