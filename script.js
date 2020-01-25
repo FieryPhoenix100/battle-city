@@ -2,17 +2,17 @@ var sizeCell = 32;
 var canvas = document.getElementById("screen");
 var ctx = canvas.getContext("2d");
 var colorBackground = "orange";
-var speed = sizeCell / 32;
+var speed = sizeCell / 16;
 
 var map = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0 //y
     [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //1
     [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
     [0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //3
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //4
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //5
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //6
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //7
+    [0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0], //7
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //8
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //9
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //10
@@ -70,24 +70,27 @@ function Tank() {
     this.x = 0;
     this.y = 0;
     this.direction = 1;
+    this.masBlock = [];
 }
 
 Tank.prototype.move = function(direction) {
     this.direction = direction;
     this.clear();
-    switch(direction) {
-        case 0: // ^
-            this.y -= speed;
-            break;
-        case 1: // >
-            this.x += speed;
-            break;
-        case 2: // 
-            this.y += speed;
-            break;
-        case 3: // <
-            this.x -= speed;
-            break;
+    if (!this.isBlocked()) {
+        switch(direction) {
+            case 0: // ^
+                this.y -= speed;
+                break;
+            case 1: // >
+                this.x += speed;
+                break;
+            case 2: // 
+                this.y += speed;
+                break;
+            case 3: // <
+                this.x -= speed;
+                break;
+        }
     }
     this.draw();
 }
@@ -122,6 +125,40 @@ Tank.prototype.draw = function() {
 Tank.prototype.shoot = function() {
 
 }
+
+Tank.prototype.isBlocked = function() {
+    var y;
+    var x;
+    switch(this.direction) {
+        case 0: // ^
+            y = Math.floor((this.y - 1)/ sizeCell);
+            if (y != 0 && map[y][Math.floor(this.x / sizeCell)] == 0 && map[y][Math.floor((this.x + sizeCell - 1)/ sizeCell)] == 0) {
+                return false;
+            }
+            return true;
+        case 1: // >
+            x = Math.floor(this.x / sizeCell) + 1;
+            if (x != 14 && map[Math.floor(this.y / sizeCell)][x] == 0 && map[Math.floor((this.y + sizeCell - 1) / sizeCell)][x] == 0) {
+                return false;
+            }
+            return true;
+        case 2: // 
+            y = Math.floor(this.y/ sizeCell) + 1;
+            if (y != 14 && map[y][Math.floor(this.x / sizeCell)] == 0 && map[y][Math.floor((this.x + sizeCell - 1) / sizeCell)] == 0) {
+                return false;
+            }
+            return true;
+        case 3: // <
+            x = Math.floor((this.x - 1) / sizeCell);
+            if (x != 0 && map[Math.floor(this.y / sizeCell)][x] == 0 && map[Math.floor((this.y + sizeCell - 1)/ sizeCell)][x] == 0) {
+                return false;
+            }
+            return true;
+    }
+    return false;
+}
+
+Tank.prototype.GetPo
 
 var userTank = new Tank();
 userTank.color = "#006400";
