@@ -3,6 +3,7 @@ var canvas = document.getElementById("screen");
 var ctx = canvas.getContext("2d");
 var colorBackground = "orange";
 var speed = sizeCell / 16;
+var speedBullet = sizeCell / 8;
 
 var map = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0 //y
@@ -28,6 +29,8 @@ var map = [
     ctx.fillStyle = colorBackground;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     mapInit();
+    var userTank = new Tank();
+    userTank.color = "#006400";
 })();
 
 function mapInit() {
@@ -158,10 +161,44 @@ Tank.prototype.isBlocked = function() {
     return false;
 }
 
-Tank.prototype.GetPo
+function Bullet(isUserTank, x, y, direction) {
+    this.isUserTank = isUserTank;
+    this.x = x;
+    this.y = y;
+    this.direction = direction;
+    this.color = "#006400";
+}
 
-var userTank = new Tank();
-userTank.color = "#006400";
+Bullet.prototype.move = function() {
+    switch(this.direction) {
+        case 0: // ^
+            this.y = this.y + speedBullet;
+        case 1: // >
+            this.x = this.x + speedBullet;
+        case 2: // 
+            this.y = this.y - speedBullet;
+        case 3: // <
+            this.x = this.x - speedBullet;
+    }
+}
+
+Bullet.prototype.collisionWithTank = function() {
+
+}
+
+Bullet.prototype.collisionWithWall = function() {
+    
+}
+
+Bullet.prototype.draw = function() {
+    ctx.fillStyle = this.color;
+    switch(this.direction) {
+        case 0 || 2: // ^
+            ctx.fillRect(this.x, this.y, 4, 8)
+        case 1 || 3: // >
+            ctx.fillRect(this.x, this.y, 8, 4)
+    }
+}
 
 document.addEventListener('keydown', function(event) {
     switch(event.code) {
